@@ -76,13 +76,23 @@ class Note extends Controller
                 ->with([
                         'error_messages' => $validator->getMessageBag()->all(),
                         'note_body' => $request->get('note_body'),
-                        'is_important' => $request->get('is_important')
+                        'is_important' => $request->get('is_important'),
+                        'note' => $note
                     ]);
         }
         $note->note_body = $request->get('note_body');
         $note->is_important = (bool) $request->get('is_important');
         $note->saveOrFail();
 
+        return Redirect::route('index');
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function postDelete(NoteModel $note): RedirectResponse
+    {
+        $note->deleteOrFail();
         return Redirect::route('index');
     }
 }
